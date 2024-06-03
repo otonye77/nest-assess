@@ -25,10 +25,15 @@ export class EpisodesService {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   update(id: number, _updateEpisodeDto: UpdateEpisodeDto) {
-    return `This action updates a #${id} episode`;
+    return this.prisma.location.update({
+      where: { id },
+      data: _updateEpisodeDto,
+    });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} episode`;
+    return this.prisma.location.delete({
+      where: { id },
+    });
   }
 }

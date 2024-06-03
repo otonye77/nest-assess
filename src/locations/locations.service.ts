@@ -14,19 +14,36 @@ export class LocationsService {
   }
 
   findAll() {
-    return `This action returns all locations`;
+    return this.prisma.episode.findMany({
+      include: {
+        comments: true,
+      },
+      orderBy: {
+        releaseDate: 'asc',
+      },
+    });
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} location`;
+    return this.prisma.episode.findUnique({
+      where: { id },
+      include: {
+        comments: true,
+      },
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   update(id: number, _updateLocationDto: UpdateLocationDto) {
-    return `This action updates a #${id} location`;
+    return this.prisma.episode.update({
+      where: { id },
+      data: _updateLocationDto,
+    });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} location`;
+    return this.prisma.episode.delete({
+      where: { id },
+    });
   }
 }
