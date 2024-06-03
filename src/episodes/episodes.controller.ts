@@ -39,4 +39,9 @@ export class EpisodesController {
   remove(@Param('id') id: string) {
     return this.episodesService.remove(+id);
   }
+
+  @Get('character/:id')
+  findEpisodesByCharacter(@Param('id') characterId: string) {
+    return this.episodesService.findEpisodesByCharacter(characterId);
+  }
 }

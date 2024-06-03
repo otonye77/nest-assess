@@ -36,27 +36,54 @@ export class EpisodesService {
     return episode;
   }
 
-  findAll() {
-    return this.prisma.location.findMany();
+  async findAll() {
+    return this.prisma.episode.findMany({
+      orderBy: { releaseDate: 'asc' },
+      include: {
+        comments: {
+          select: { id: true },
+        },
+      },
+    });
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     return this.prisma.location.findUnique({
       where: { id },
     });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  update(id: number, _updateEpisodeDto: UpdateEpisodeDto) {
+  async update(id: number, _updateEpisodeDto: UpdateEpisodeDto) {
     return this.prisma.location.update({
       where: { id },
       data: _updateEpisodeDto,
     });
   }
 
-  remove(id: number) {
+  async remove(id: number) {
     return this.prisma.location.delete({
       where: { id },
+    });
+  }
+
+  async findEpisodesByCharacter(characterId: string) {
+    // Convert characterId to a number
+    const parsedCharacterId = parseInt(characterId, 10);
+
+    // Check if parsing was successful
+    if (isNaN(parsedCharacterId)) {
+      throw new NotFoundException('Invalid characterId provided');
+    }
+
+    return this.prisma.episode.findMany({
+      where: {
+        characters: {
+          some: {
+            id: parsedCharacterId, // Use the parsed number
+          },
+        },
+      },
     });
   }
 }

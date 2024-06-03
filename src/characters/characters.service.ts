@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateCharacterDto } from './dto/create-character.dto';
 import { UpdateCharacterDto } from './dto/update-character.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -36,7 +36,13 @@ export class CharactersService {
     }
   }
 
-  async findAll(sort: string, filter: string) {
+  async findAll(
+    sort: string,
+    filter: string,
+    gender: string,
+    status: string,
+    location: string,
+  ) {
     let orderBy = {};
     if (sort) {
       orderBy = { firstName: sort };
@@ -44,6 +50,25 @@ export class CharactersService {
     let where = {};
     if (filter) {
       where = { gender: filter };
+    }
+    if (gender) {
+      if (!['MALE', 'FEMALE'].includes(gender.toUpperCase())) {
+        throw new BadRequestException(
+          'Invalid gender. Gender must be either "MALE" or "FEMALE".',
+        );
+      }
+      where = { ...where, gender };
+    }
+    if (status) {
+      if (!['ACTIVE', 'DEAD', 'UNKNOWN'].includes(status.toUpperCase())) {
+        throw new BadRequestException(
+          'Invalid status. Status must be either "ACTIVE", "DEAD", or "UNKNOWN".',
+        );
+      }
+      where = { ...where, status };
+    }
+    if (location) {
+      where = { ...where, location: { name: location } };
     }
     return this.prisma.character.findMany({
       where,
