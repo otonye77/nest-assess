@@ -7,7 +7,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class EpisodesService {
   constructor(private prisma: PrismaService) {}
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  create(_createEpisodeDto: CreateEpisodeDto) {
+  async create(_createEpisodeDto: CreateEpisodeDto) {
     return this.prisma.episode.create({
       data: _createEpisodeDto,
     });

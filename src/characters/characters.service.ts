@@ -7,10 +7,33 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class CharactersService {
   constructor(private prisma: PrismaService) {}
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  create(_createCharacterDto: CreateCharacterDto) {
-    return this.prisma.character.create({
-      data: _createCharacterDto,
-    });
+  async create(createCharacterDto: CreateCharacterDto) {
+    const { episodeIds, ...characterData } = createCharacterDto;
+    try {
+      const episodes = await this.prisma.episode.findMany({
+        where: {
+          id: {
+            in: episodeIds,
+          },
+        },
+      });
+
+      if (episodes.length !== episodeIds.length) {
+        throw new Error('One or more provided episodeIds do not exist.');
+      }
+      const character = await this.prisma.character.create({
+        data: {
+          ...characterData,
+          episodes: {
+            connect: episodeIds.map((id) => ({ id })),
+          },
+        },
+      });
+
+      return character;
+    } catch (error) {
+      throw new Error(`Failed to create character: ${error.message}`);
+    }
   }
 
   findAll(sort: string, filter: string) {
@@ -33,7 +56,13 @@ export class CharactersService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} character`;
+    return this.prisma.character.findUnique({
+      where: { id },
+      include: {
+        location: true,
+        episodes: true,
+      },
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

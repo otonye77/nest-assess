@@ -31,7 +31,7 @@ model Location {
   name       String
   latitude   Float
   longitude  Float
-  createdAt  DateTime
+  createdAt   DateTime  @default(now())
   characters Character[]
 }
 
