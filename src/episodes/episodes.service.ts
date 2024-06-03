@@ -14,11 +14,13 @@ export class EpisodesService {
   }
 
   findAll() {
-    return `This action returns all episodes`;
+    return this.prisma.location.findMany();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} episode`;
+    return this.prisma.location.findUnique({
+      where: { id },
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
