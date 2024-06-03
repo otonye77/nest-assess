@@ -37,8 +37,8 @@ CREATE TABLE "Episode" (
 -- CreateTable
 CREATE TABLE "Comment" (
     "id" SERIAL NOT NULL,
-    "comment" TEXT NOT NULL,
-    "ipAddress" TEXT NOT NULL,
+    "comment" VARCHAR(250) NOT NULL,
+    "ipAddressLocation" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "episodeId" INTEGER NOT NULL,
 

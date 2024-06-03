@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { CreateEpisodeDto } from './dto/create-episode.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { CreateCommentDto, CreateEpisodeDto } from './dto/create-episode.dto';
 import { UpdateEpisodeDto } from './dto/update-episode.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -7,10 +7,33 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class EpisodesService {
   constructor(private prisma: PrismaService) {}
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async create(_createEpisodeDto: CreateEpisodeDto) {
-    return this.prisma.episode.create({
-      data: _createEpisodeDto,
+  async create(createEpisodeDto: CreateEpisodeDto) {
+    const { characterIds, comments, ...episodeData } = createEpisodeDto;
+
+    const charactersCount = await this.prisma.character.count({
+      where: { id: { in: characterIds } },
     });
+
+    if (charactersCount !== characterIds.length) {
+      throw new NotFoundException(
+        'Failed to create episode: One or more provided characterIds do not exist.',
+      );
+    }
+
+    const episode = await this.prisma.episode.create({
+      data: {
+        ...episodeData,
+        characters: { connect: characterIds.map((id) => ({ id })) },
+        comments: {
+          create: comments.map((comment: CreateCommentDto) => ({
+            comment: comment.comment,
+            ipAddressLocation: comment.ipAddressLocation,
+          })),
+        },
+      },
+    });
+
+    return episode;
   }
 
   findAll() {
