@@ -36,7 +36,7 @@ export class CharactersService {
     }
   }
 
-  findAll(sort: string, filter: string) {
+  async findAll(sort: string, filter: string) {
     let orderBy = {};
     if (sort) {
       orderBy = { firstName: sort };
@@ -55,7 +55,7 @@ export class CharactersService {
     });
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     return this.prisma.character.findUnique({
       where: { id },
       include: {
@@ -66,11 +66,24 @@ export class CharactersService {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  update(id: number, _updateCharacterDto: UpdateCharacterDto) {
-    return `This action updates a #${id} character`;
+  async update(id: number, updateCharacterDto: UpdateCharacterDto) {
+    const { locationId, episodeIds, ...data } = updateCharacterDto;
+    return this.prisma.character.update({
+      where: { id },
+      data: {
+        ...data,
+        location: { connect: { id: locationId } },
+        episodes: {
+          disconnect: episodeIds.map((episodeId) => ({ id: episodeId })),
+          connect: episodeIds.map((episodeId) => ({ id: episodeId })),
+        },
+      },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} character`;
+  async remove(id: number) {
+    return this.prisma.character.delete({
+      where: { id },
+    });
   }
 }
