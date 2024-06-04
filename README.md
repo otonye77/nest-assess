@@ -4,7 +4,7 @@ This repository contains the backend implementation. The implementation follows 
 
 
 ## Installation
-- On your desktop terminal run the command ```git clone https://github.com/Youngprinnce/vendease.git```
+- On your desktop terminal run the command ```git clone https://github.com/otonye77/nest-assess.git```
 - Replace the DATABASE_URL with your preferred postgres url.
 - Run command ```npm install``` to download project dependencies
 - Install Docker if you dont already have it
