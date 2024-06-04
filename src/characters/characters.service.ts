@@ -47,29 +47,31 @@ export class CharactersService {
     if (sort) {
       orderBy = { firstName: sort };
     }
-    let where = {};
-    if (filter) {
-      where = { gender: filter };
-    }
+
+    const where: any = {};
+
     if (gender) {
       if (!['MALE', 'FEMALE'].includes(gender.toUpperCase())) {
         throw new BadRequestException(
           'Invalid gender. Gender must be either "MALE" or "FEMALE".',
         );
       }
-      where = { ...where, gender };
+      where.gender = gender.toUpperCase();
     }
+
     if (status) {
       if (!['ACTIVE', 'DEAD', 'UNKNOWN'].includes(status.toUpperCase())) {
         throw new BadRequestException(
           'Invalid status. Status must be either "ACTIVE", "DEAD", or "UNKNOWN".',
         );
       }
-      where = { ...where, status };
+      where.status = status.toUpperCase();
     }
+
     if (location) {
-      where = { ...where, location: { name: location } };
+      where.location = { name: location };
     }
+
     return this.prisma.character.findMany({
       where,
       orderBy,

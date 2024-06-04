@@ -30,7 +30,7 @@ This repository contains the backend implementation. The implementation follows 
   - `GET /characters`: Retrieve all characters
   - `POST /characters`: Create a character
   - `DELETE /characters/:id` DELETE A SINGLE CHARACTER
-  - `GET /characters?gender=FEMALE&status=ACTIVE&sort=asc` TO GET ALL FEMALES THAT ARE ACTIVE AND SORTED IN ASCENDING ORDER. FOR EXAMPLE
+  - `GET /characters?gender=MALE` TO GET ALL FEMALES IN ASCENDING ORDER. FOR EXAMPLE
     - `PATCH /characters/:id` UPDATE A SINGLE CHARACTER
 
 - **Lcation**
