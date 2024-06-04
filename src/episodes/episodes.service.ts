@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCommentDto, CreateEpisodeDto } from './dto/create-episode.dto';
-import { UpdateEpisodeDto } from './dto/update-episode.dto';
+// import { UpdateEpisodeDto } from './dto/update-episode.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -48,30 +48,31 @@ export class EpisodesService {
   }
 
   async findOne(id: number) {
-    return this.prisma.location.findUnique({
+    return this.prisma.episode.findUnique({
       where: { id },
     });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async update(id: number, _updateEpisodeDto: UpdateEpisodeDto) {
-    return this.prisma.location.update({
-      where: { id },
-      data: _updateEpisodeDto,
-    });
-  }
+  // async update(id: number, _updateEpisodeDto: UpdateEpisodeDto) {
+  //   return this.prisma.episode.update({
+  //     where: { id },
+  //     data: _updateEpisodeDto,
+  //   });
+  // }
 
   async remove(id: number) {
-    return this.prisma.location.delete({
+    await this.prisma.comment.deleteMany({
+      where: { episodeId: id },
+    });
+    return this.prisma.episode.delete({
       where: { id },
     });
   }
 
   async findEpisodesByCharacter(characterId: string) {
-    // Convert characterId to a number
     const parsedCharacterId = parseInt(characterId, 10);
 
-    // Check if parsing was successful
     if (isNaN(parsedCharacterId)) {
       throw new NotFoundException('Invalid characterId provided');
     }
@@ -80,7 +81,7 @@ export class EpisodesService {
       where: {
         characters: {
           some: {
-            id: parsedCharacterId, // Use the parsed number
+            id: parsedCharacterId,
           },
         },
       },

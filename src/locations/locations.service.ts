@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateLocationDto } from './dto/create-location.dto';
-import { UpdateLocationDto } from './dto/update-location.dto';
+// import { UpdateLocationDto } from './dto/update-location.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -14,36 +14,26 @@ export class LocationsService {
   }
 
   findAll() {
-    return this.prisma.episode.findMany({
-      include: {
-        comments: true,
-      },
-      orderBy: {
-        releaseDate: 'asc',
-      },
-    });
+    return this.prisma.location.findMany();
   }
 
   findOne(id: number) {
-    return this.prisma.episode.findUnique({
+    return this.prisma.location.findUnique({
       where: { id },
-      include: {
-        comments: true,
-      },
     });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  update(id: number, _updateLocationDto: UpdateLocationDto) {
-    return this.prisma.episode.update({
-      where: { id },
-      data: _updateLocationDto,
-    });
-  }
+  // update(id: number, _updateLocationDto: UpdateLocationDto) {
+  //   return this.prisma.episode.update({
+  //     where: { id },
+  //     data: _updateLocationDto,
+  //   });
+  // }
 
-  remove(id: number) {
-    return this.prisma.episode.delete({
-      where: { id },
-    });
-  }
+  // remove(id: number) {
+  //   return this.prisma.episode.delete({
+  //     where: { id },
+  //   });
+  // }
 }

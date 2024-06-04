@@ -25,9 +25,9 @@ export class CharactersController {
   findAll(
     @Query('sort') sort: string,
     @Query('filter') filter: string,
-    @Query('gender') gender: string, // New query parameter for filtering by gender
-    @Query('status') status: string, // New query parameter for filtering by status
-    @Query('location') location: string, // New query parameter for filtering by location
+    @Query('gender') gender: string,
+    @Query('status') status: string,
+    @Query('location') location: string,
   ) {
     return this.charactersService.findAll(
       sort,

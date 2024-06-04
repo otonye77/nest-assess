@@ -8,7 +8,13 @@ import { LocationsModule } from './locations/locations.module';
 import { CommentsModule } from './comments/comments.module';
 
 @Module({
-  imports: [CharactersModule, PrismaModule, EpisodesModule, LocationsModule, CommentsModule],
+  imports: [
+    CharactersModule,
+    PrismaModule,
+    EpisodesModule,
+    LocationsModule,
+    CommentsModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
