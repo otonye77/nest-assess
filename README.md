@@ -8,8 +8,7 @@ This repository contains the backend implementation. The implementation follows 
 - Replace the DATABASE_URL with your preferred postgres url.
 - Run command ```npm install``` to download project dependencies
 - Install Docker if you dont already have it
-- Run command ```docker compose up dev-db -d``` to create your development db on docker
-- Run command ```npx prisma migrate dev``` to run database migrations
+- Run command ```npm run db:dev:restart``` to create your development db on docker and get existing migrations
 - Run command ```npm start``` to run the project
 
 
@@ -31,6 +30,7 @@ This repository contains the backend implementation. The implementation follows 
   - `POST /characters`: Create a character
   - `DELETE /characters/:id` DELETE A SINGLE CHARACTER
   - `GET /characters?gender=MALE` TO GET ALL FEMALES IN ASCENDING ORDER. FOR EXAMPLE
+  -  `http://localhost:3000/characters?gender=FEMALE&status=ACTIVE&sort=asc` TO GET ALL FEMALES ACTIVE IN ASCENDING ORDER
     - `PATCH /characters/:id` UPDATE A SINGLE CHARACTER
 
 - **Lcation**
